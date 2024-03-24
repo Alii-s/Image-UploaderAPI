@@ -1,19 +1,15 @@
 using imageUploaderAPI;
 using System.Text.Json;
 using System.Xml;
+using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
-app.UseDefaultFiles();
+
 app.UseStaticFiles();
-// Configure the HTTP request pipeline.
 
 app.MapPost("/api", async (HttpContext context) =>
 {
@@ -56,12 +52,38 @@ app.MapPost("/api", async (HttpContext context) =>
     await context.Response.WriteAsync(data.id);
 
 });
+app.MapGet("/data/{id}", async (string id, HttpContext context) =>
+{
+    var filePath = Path.Combine(app.Environment.ContentRootPath, "images.json");
+
+    if (!File.Exists(filePath))
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsync("Json Object not found");
+        return Results.NotFound();
+    }
 
 
-app.MapGet("/picture/{id}", async (HttpContext context) =>
+    var jsonData = await File.ReadAllTextAsync(filePath);
+
+    var picData = JsonSerializer.Deserialize<pictureData>(jsonData);
+    var extension = Path.GetExtension(picData.Image);
+    var imagePath = Path.Combine("data", $"{id}{extension}");
+    if(File.Exists(imagePath))
+    {
+        var image = File.OpenRead(imagePath);
+        return Results.File(image, extension);
+    }
+    else
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        return Results.NotFound("Image not found");
+    }
+});
+
+app.MapGet("/picture/{id}", async (string id,HttpContext context) =>
 {
 
-    var uniqueId = context.Request.RouteValues["id"]?.ToString();
 
 
     var filePath = Path.Combine(app.Environment.ContentRootPath, "images.json");
@@ -77,8 +99,7 @@ app.MapGet("/picture/{id}", async (HttpContext context) =>
     var jsonData = await File.ReadAllTextAsync(filePath);
 
     var picData = JsonSerializer.Deserialize<pictureData>(jsonData);
-    var imagePath = $"{uniqueId}{Path.GetExtension(picData.Image)}";
-
+    var imagePath = $"/data/{id}";
     var htmlContent = $@"
         <!DOCTYPE html>
         <html lang='en'>
@@ -89,7 +110,7 @@ app.MapGet("/picture/{id}", async (HttpContext context) =>
         </head>
         <body>
             <h1>{picData.Name}</h1>
-            <img src='../data/{imagePath}' alt='{picData.Name}'>
+            <img src='{imagePath}' alt='{picData.Name}'>
         </body>
         </html>";
 
@@ -99,9 +120,7 @@ app.MapGet("/picture/{id}", async (HttpContext context) =>
     await context.Response.WriteAsync(htmlContent);
 });
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 
 app.Run();
