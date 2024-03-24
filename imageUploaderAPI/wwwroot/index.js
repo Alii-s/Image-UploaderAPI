@@ -22,7 +22,7 @@ nameInput.addEventListener("change", validate);
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    // if (validate()) {
+    if (validate()) {
         const formData = new FormData();
         formData.append("img", imgInput.files[0]);
         formData.append("name", nameInput.value);
@@ -34,5 +34,5 @@ form.addEventListener("submit", (e) => {
         .catch((err) => {
             console.log("Error: ", err.response.data);
         });
-    // }
+    }
 });
