@@ -42,6 +42,7 @@ app.MapPost("/api", async (HttpContext context) =>
     };
     var json = JsonSerializer.Serialize(data);
     var filePath = Path.Combine(app.Environment.ContentRootPath,"images.json");
+    Directory.CreateDirectory("data");
     var imageFilePath = Path.Combine("data", $"{data.id}{Path.GetExtension(data.Image)}");
     using (var stream = new FileStream(imageFilePath, FileMode.Create))
     {

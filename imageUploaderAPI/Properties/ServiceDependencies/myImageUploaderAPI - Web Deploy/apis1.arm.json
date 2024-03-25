@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('imageUploaderAPI', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('imageUploaderAPIAli', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -49,7 +49,7 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "myImageUploaderAPI",
+              "name": "imageUploaderAPIAli",
               "type": "Microsoft.ApiManagement/service",
               "location": "[parameters('resourceLocation')]",
               "properties": {
@@ -59,7 +59,7 @@
                 "hostnameConfigurations": [
                   {
                     "type": "Proxy",
-                    "hostName": "myimageuploaderapi.azure-api.net",
+                    "hostName": "imageuploaderapiali.azure-api.net",
                     "encodedCertificate": null,
                     "keyVaultId": null,
                     "certificatePassword": null,
@@ -95,9 +95,9 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "myImageUploaderAPI/imageUploaderAPI",
+              "name": "imageUploaderAPIAli/imageUploaderAPIAli",
               "properties": {
-                "displayName": "imageUploaderAPI",
+                "displayName": "imageUploaderAPIAli",
                 "apiRevision": "1",
                 "description": null,
                 "subscriptionRequired": true,
@@ -118,7 +118,7 @@
               },
               "apiVersion": "2019-12-01",
               "dependsOn": [
-                "myImageUploaderAPI"
+                "imageUploaderAPIAli"
               ]
             }
           ]
