@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "imageUploaderAPI20240324192816ResourceGroup",
+      "defaultValue": "imageUploaderAPI20240325172159ResourceGroup",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
@@ -49,17 +49,17 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "imageUploaderAPIapi",
+              "name": "myImageUploaderAPI",
               "type": "Microsoft.ApiManagement/service",
               "location": "[parameters('resourceLocation')]",
               "properties": {
-                "publisherEmail": "ali.moh03@outlook.com",
+                "publisherEmail": "ali.abdelghani03@gmail.com",
                 "publisherName": "Ali Abdelghani",
                 "notificationSenderEmail": "apimgmt-noreply@mail.windowsazure.com",
                 "hostnameConfigurations": [
                   {
                     "type": "Proxy",
-                    "hostName": "imageuploaderapiapi.azure-api.net",
+                    "hostName": "myimageuploaderapi.azure-api.net",
                     "encodedCertificate": null,
                     "keyVaultId": null,
                     "certificatePassword": null,
@@ -95,7 +95,7 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "imageUploaderAPIapi/imageUploaderAPI",
+              "name": "myImageUploaderAPI/imageUploaderAPI",
               "properties": {
                 "displayName": "imageUploaderAPI",
                 "apiRevision": "1",
@@ -118,7 +118,7 @@
               },
               "apiVersion": "2019-12-01",
               "dependsOn": [
-                "imageUploaderAPIapi"
+                "myImageUploaderAPI"
               ]
             }
           ]
