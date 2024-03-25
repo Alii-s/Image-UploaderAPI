@@ -20,19 +20,34 @@ function validate() {
 imgInput.addEventListener("change", validate);
 nameInput.addEventListener("change", validate);
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (validate()) {
         const formData = new FormData();
         formData.append("img", imgInput.files[0]);
         formData.append("name", nameInput.value);
-        axios.post("/api", formData).then((res) => {
-            if(res.status === 200) {
-                window.location.href = `/picture/${res.data}`;
+
+        console.log("Form Data:", formData); // Log formData for debugging
+
+        try {
+            const response = await fetch("/api", {
+                method: "POST",
+                body: formData
+            });
+
+            console.log("Response Status:", response.status); // Log response status for debugging
+
+            if (response.ok) {
+                const responseData = await response.text();
+                console.log("Response Data:", responseData); // Log response data for debugging
+                window.location.href = `/picture/${responseData}`;
+            } else {
+                const errorData = await response.text()
+                console.log("Error:", errorData);
             }
-        })
-        .catch((err) => {
-            console.log("Error: ", err.response.data);
-        });
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
 });
+
