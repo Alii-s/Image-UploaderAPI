@@ -1,11 +1,7 @@
 using imageUploaderAPI;
 using System.Text.Json;
-using System.Xml;
-using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 var app = builder.Build();
 
