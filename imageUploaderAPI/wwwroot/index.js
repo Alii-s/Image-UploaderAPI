@@ -27,7 +27,7 @@ form.addEventListener("submit", async (e) => {
         formData.append("img", imgInput.files[0]);
         formData.append("name", nameInput.value);
 
-        console.log("Form Data:", formData); // Log formData for debugging
+        console.log("Form Data:", formData); // Log for debugging
 
         try {
             const response = await fetch("/api", {
@@ -50,4 +50,3 @@ form.addEventListener("submit", async (e) => {
         }
     }
 });
-
