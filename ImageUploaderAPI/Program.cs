@@ -55,14 +55,9 @@ app.MapGet("/data/{id}", async (string id, HttpContext context) =>
 
     if (!File.Exists(filePath))
     {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsync("Json Object not found");
-        return Results.NotFound();
+        return Results.NotFound("Json Object not found");
     }
-
-
     var jsonData = await File.ReadAllTextAsync(filePath);
-
     var picData = JsonSerializer.Deserialize<pictureData>(jsonData);
     var extension = Path.GetExtension(picData.Image);
     var imagePath = Path.Combine("data", $"{id}{extension}");
@@ -73,26 +68,18 @@ app.MapGet("/data/{id}", async (string id, HttpContext context) =>
     }
     else
     {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
         return Results.NotFound("Image not found");
     }
 });
 
 app.MapGet("/picture/{id}", async (string id,HttpContext context) =>
 {
-
-
-
     var filePath = Path.Combine(app.Environment.ContentRootPath, "images.json");
 
     if (!File.Exists(filePath))
     {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsync("Json Object not found");
-        return;
+        return Results.NotFound("Json Object not found");
     }
-
-
     var jsonData = await File.ReadAllTextAsync(filePath);
 
     var picData = JsonSerializer.Deserialize<pictureData>(jsonData);
@@ -115,6 +102,7 @@ app.MapGet("/picture/{id}", async (string id,HttpContext context) =>
 
 
     await context.Response.WriteAsync(htmlContent);
+    return Results.Ok();
 });
 
 
